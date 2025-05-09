@@ -6,3 +6,4 @@ plotly      # charts
 python-pptx # ppt-generator
 python-multipart  # for file upload
 python-dotenv
+seaborn

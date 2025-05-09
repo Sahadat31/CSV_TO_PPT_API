@@ -50,7 +50,7 @@ def add_bullet_slide(prs, title: str, bullets: list[str]):
     tf = slide.placeholders[1].text_frame
     tf.clear()
     for bullet in bullets:
-        if bullet.strip():
+        if bullet.strip() and len(bullet)>5:
             p = tf.add_paragraph()
             p.text = clean_markdown(bullet.strip("-• ").strip())
             p.level = 0
@@ -68,25 +68,18 @@ def create_ppt(summary: str, insights: list[str], chart_paths: list[str]) -> str
     # Summary Slides (break into multiple if too long)
     add_wrapped_text_slide(prs, "Executive Summary", summary)
 
-    # Insight Slides (each item → 1 slide)
+    # Insight Slides
     for i, insight in enumerate(insights):
-        title = f"Insight {i+1}"
-        insight.replace('*','')
-        add_wrapped_text_slide(prs, title, insight)
+        insights[i]=insight.replace('*',' ')
+    c=0
+    for i in range(0,len(insights),3):
+        add_bullet_slide(prs,f"Insight {c+1}", insights[i:min(i+3,len(insights))])
+        c+=1
 
     # Charts Section
     for i, path in enumerate(chart_paths):
         add_chart_slide(prs, f"Chart {i+1}", path)
 
-    # Closing Recommendations (optional static content)
-    recommendations = [
-        "Ensure broader geographic sampling in future surveys.",
-        "Review screening logic (S1–S4) for potential over-filtering.",
-        "Explore battery performance differences between brands.",
-        "Investigate time inefficiencies in patient transport.",
-        "Continue improving comfort and safety feedback collection."
-    ]
-    add_bullet_slide(prs, "AI Recommendations", recommendations)
     add_thank_you_slide(prs)
 
     output_path = "output/generated_presentation_structured.pptx"
