@@ -1,0 +1,8 @@
+fastapi[standard]
+pandas
+google-genai
+matplotlib   #charts
+plotly      # charts
+python-pptx # ppt-generator
+python-multipart  # for file upload
+python-dotenv
